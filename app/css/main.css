@@ -8040,7 +8040,13 @@ main {
     -webkit-align-items: center;
     -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
     height: 420px; }
+    .description .desc-content p {
+      white-space: pre-wrap; }
   .description .main-logo {
     text-align: center;
     margin-top: 25px; }
@@ -8060,6 +8066,7 @@ main {
   display: flex;
   background-color: #a6864d;
   text-align: center;
+  min-height: 130px;
   position: absolute;
   color: white;
   bottom: 0;

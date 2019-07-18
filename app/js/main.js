@@ -48,19 +48,15 @@
 			}
 		}, 1000);
 
-		function changeDesc(){
-			try{
-				var username = Pic.currentData.username;
-				var avatar = Pic.currentData.avatar;
-				$(".person-name").text("@"+username);
-				$(".person-img img").attr("src", avatar);
-			}catch(err){
-
-			}
+		function changeDesc(currentSlide){
+			var username = currentSlide.attr("data-username");
+			var avatar = currentSlide.attr("data-avatar");
+			$(".person-name").text("@"+username).hide().fadeIn(800);
+			$(".person-img img").attr("src", avatar).hide().fadeIn(800);
+			$(".caption").text(currentSlide.find(".slide-caption").text()).hide().fadeIn(800);
 		}
 
 		function stepSlide(currentSlide){
-
 
 			currentSlide.addClass("is-shown");
 
@@ -70,7 +66,9 @@
 			var slidesLength = $(Pic.slideItemClass).length;
 
 
+			textLimit()
 			changeDesc(currentSlide);
+
 			// Запрос на картинки
 			Pic.parser({
 				success: function(){
@@ -93,7 +91,10 @@
 		// События смены слайды
 		
 
-
+		// Случайное число
+		function IntRandom(){
+			return Math.round((Math.random() * 1e12))
+		}
 
 		slidermain.on( 'select.flickity', function( event ) {
 			if( typeof figurePrevId == "undefined" )
@@ -106,9 +107,11 @@
 			
 			if ( selectId && selectId == figurePrevId )
 				return;
+
 			currentSlide.attr(Pic._attrFigureId, rand);
 			figurePrevId = currentSlide.attr(Pic._attrFigureId);
 			stepSlide(currentSlide);
+
 		});
 
 
@@ -120,17 +123,21 @@
 			maxLenght:  5, // Максимальное кол-во элементов в слайдере
 			inc: 0,
 			currentSlide: undefined,
-			currentData: undefined,
 			responseError: 0,
 			_attrFigureId: "figure-id",
 
-			appendTemplate:  function () {
-				var that = this;
-				if(!(that.currentData))
+
+			appendTemplate:  function (data) {
+				console.log(  );
+				if( ""+data == "null" )
 					return;
-				var newTemp = this.template	.replace(/{id-data}/gim, that.currentData.mediaId)
+				data = data[0];
+				var newTemp = this.template	.replace(/{id-data}/gim, data.mediaId)
 																		.replace(/{figureIdRandom}/gim, IntRandom())
-																		.replace(/{img}/gim, that.currentData.mediaUrl);
+																		.replace(/{avatar}/gim, data.avatar)
+																		.replace(/{username}/gim, data.username)
+																		.replace(/{caption}/gim, data.caption)
+																		.replace(/{img}/gim, data.mediaUrl);
 			  slidermain.flickity( 'append', $(newTemp) );
 
 			},
@@ -155,11 +162,11 @@
 							slidermain.flickity('playPlayer'); // Запуск слайдера при отсутствии JSON данных
 							return;
 						}
-						if( data != null )
-							that.currentData = data[0] || undefined;
+						// $(data).map(function( i, el ){
+						// });
 
-						that.appendTemplate(); // Вставка в слайдер
-						console.log(data);
+						that.appendTemplate( data ); // Вставка в слайдер
+
 						slidermain.flickity('playPlayer'); // Запуск слайдера
 						that.inc++;
 
@@ -197,6 +204,9 @@
 												'<div class="img mirror" style="background-image: url(\'{img}\');"></div>'+
 											'</div>'+
 										'</div>'+
+										'<div class="slide-caption hide">'+
+											"{caption}"+
+										'</div>'+
 									'</figure>';
 
 
@@ -220,16 +230,18 @@
 		}
 
 		//Лимит текста
-		$("[data-text-limit]").map(function( i, el ){
-			el = $(el);
-			var text = el.text();
-			var textLimit = el.attr("data-text-limit");
+		window.textLimit = function (){
+			$("[data-text-limit]").map(function( i, el ){
+				el = $(el);
+				var text = el.text();
+				var textLimit = el.attr("data-text-limit");
 
-			if( text.length > textLimit*1 ){
-				text = text.substring(0, textLimit )
-				el.text( text+ " ..." );
-			}
-		})
+				if( text.length > textLimit*1 ){
+					text = text.substring(0, textLimit )
+					el.text( text+ " ..." );
+				}
+			})
+		}
 
 		//SCROLL
 		$(window).on("scroll", function(e) {
@@ -296,9 +308,7 @@ function checkSm() {
 function checkMd() {
 	return $(document).width() < 1199 && !checkSm();
 }
-function IntRandom(){
-	return Math.round((Math.random() * 1e12))
-}
+
 function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min)) + min;
 }
