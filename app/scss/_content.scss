@@ -158,7 +158,7 @@ main{
 		justify-content: center;
 		height: 420px;
 		p{
-			white-space: pre-wrap;
+			//white-space: pre-line;
 		}
 	}
 	.main-logo{
@@ -191,6 +191,8 @@ main{
 .person-img{
 	img{
 		border-radius: 50%;
+		width: 90px;
+		height: 90px;
 		box-shadow: 0 0 20px -5px rgba(black, 0.5);
 		border: 7px solid white;
 		max-width: 100px;

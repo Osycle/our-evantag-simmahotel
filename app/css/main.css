@@ -8045,8 +8045,6 @@ main {
     -ms-flex-pack: center;
     justify-content: center;
     height: 420px; }
-    .description .desc-content p {
-      white-space: pre-wrap; }
   .description .main-logo {
     text-align: center;
     margin-top: 25px; }
@@ -8090,6 +8088,8 @@ main {
 .person-img img {
   -webkit-border-radius: 50%;
   border-radius: 50%;
+  width: 90px;
+  height: 90px;
   -webkit-box-shadow: 0 0 20px -5px rgba(0, 0, 0, 0.5);
   box-shadow: 0 0 20px -5px rgba(0, 0, 0, 0.5);
   border: 7px solid white;

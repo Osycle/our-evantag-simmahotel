@@ -66,8 +66,8 @@
 			var slidesLength = $(Pic.slideItemClass).length;
 
 
-			textLimit()
 			changeDesc(currentSlide);
+			textLimit();
 
 			// Запрос на картинки
 			Pic.parser({
